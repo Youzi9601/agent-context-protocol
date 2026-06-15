@@ -1,0 +1,15 @@
+project:
+  name: ""
+  language: ""
+  framework: []
+  timezone: ""        # IANA tz, e.g. "Asia/Taipei"; used by session/snapshot filename dates
+
+coding_style:
+  - ""
+
+test_framework: ""
+
+constraints:
+  - ""
+
+key_decisions: []

@@ -1,0 +1,27 @@
+# Local-only artifacts must not be committed.
+# ACP is a convention spec; the skill, templates, and specs are versioned.
+# Internal planning documents stay on the maintainer's machine only.
+
+# Internal design / planning notes
+/plan.md
+/notes/
+/scratch/
+
+# Editor and OS noise
+.DS_Store
+Thumbs.db
+*.swp
+*.swo
+*~
+.idea/
+.vscode/
+
+# Node / tooling (defensive; the spec itself has no dependencies)
+node_modules/
+.pnpm-store/
+package-lock.json
+*.log
+
+# Local secret / config (none expected, but defensive)
+.env
+.env.local
