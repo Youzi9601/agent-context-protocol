@@ -4,8 +4,7 @@
 
 # Internal design / planning notes
 /plan.md
-/notes/
-/scratch/
+/internal/
 
 # Editor and OS noise
 .DS_Store
@@ -25,3 +24,9 @@ package-lock.json
 # Local secret / config (none expected, but defensive)
 .env
 .env.local
+
+# ACP workspace root: ignore a project-root `.acp/` directory if one is
+# ever created inside THIS repo (the ACP repo itself is a convention spec,
+# not an ACP-using project). The starter templates under `templates/.acp/`
+# remain tracked; this rule matches only the repo root.
+/.acp/

@@ -42,23 +42,21 @@ Current version: see [`SKILL.md`](../SKILL.md) header.
 
 ## Roadmap
 
-### Phase 1 (v0.1) — Workspace Conventions
-- `.acp/` folder layout
+### Workspace Conventions
+- `.acp/` folder layout with WORKSPACE.md, memory.yaml, tasks/, sessions/, snapshots/
 - `task.yaml`, `snapshot.md`, `session.md` formats
 - READ flow on entry
 - `SKILL.md` install file for individual agents
 
-### Phase 2 (v0.2) — Shared Knowledge
-- `memory.md`: shared knowledge base spec (long-form Markdown supplement to `memory.yaml`)
-- `context-assembly.md`: automatic context assembly rules (which snapshots to bundle for which task types)
-- Cross-workspace `.acp/` linking for monorepos
+### Shared Knowledge
+- `memory.md`: long-form reasoning layer (decisions, conventions, recurring pitfalls, decision index)
+- `context-assembly.yaml`: task-type → context-file mapping (optional)
+- Cross-workspace `related:` field in `memory.yaml`
 
-(Phase 2 specs are scaffolded in `spec/memory.md` and `spec/context-assembly.md`; contents are pending.)
-
-### Phase 3 (v0.3) — Prompt Library (Optional)
+### Prompt Library
 - `prompts/` directory for versioned, reusable prompt fragments
 - Migration helpers from common stores (Notion, Linear exports)
-- Conformance test suite — a small repo that contains a reference implementation of the READ flow
+- Conformance test suite — a reference implementation of the READ flow
 
 ---
 

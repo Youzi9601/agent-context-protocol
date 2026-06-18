@@ -32,6 +32,14 @@ Chose `jose` over `jsonwebtoken` for edge runtime compatibility.
 - Multiple snapshots per task are allowed. The most recent (by date in filename) is the current source of truth.
 - A new snapshot for the same task does **not** delete the prior one — the timeline is preserved.
 
+### Latest Alias Convention
+
+The filename `{task-id}-latest.md` is a **convention alias** for the most recent snapshot by date. For any task, the snapshot with the latest `YYYY-MM-DD` in its filename is considered canonical.
+
+Agents may use `{task-id}-latest.md` as a stable, predictable path to reference the most recent durable conclusion — useful in `context-assembly.yaml` patterns or when writing references from `task.yaml`.
+
+Example: For task `feature-auth` with snapshots `feature-auth-2026-06-15.md` and `feature-auth-2026-06-17.md`, the agent treats `feature-auth-2026-06-17.md` as the latest (most recent by date).
+
 ## Frontmatter
 
 | Field   | Type   | Required | Description                                  |

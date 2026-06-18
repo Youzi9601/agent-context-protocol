@@ -1,0 +1,44 @@
+# context-assembly.yaml
+# Optional manifest: maps task types to the .acp/ files an agent should load.
+# See: spec/context-assembly.md
+#
+# Agent behavior:
+#   1. Run explicit READ (WORKSPACE.md → memory.yaml → active task → latest session)
+#   2. Check if context-assembly.yaml exists
+#   3. If yes: load files listed under the task's type (or 'defaults' if no type)
+#   4. If no: use explicit READ output as-is
+#
+# Variables (substituted by the agent at runtime):
+#   ${task-id}  — id from the active task's task.yaml
+#   ${today}    — today's date in YYYY-MM-DD format
+
+defaults:
+  - WORKSPACE.md
+  - memory.yaml
+  # Add more default files here (e.g., sessions/${task-id}-${today}-*.md)
+
+tasks:
+  bug-fix:
+    - WORKSPACE.md
+    - memory.yaml
+    - tasks/${task-id}.yaml
+    - snapshots/${task-id}-*.md
+    - sessions/${task-id}-${today}-*.md
+    # bug-fix loads recent snapshots and today's sessions; not memory.md by default
+
+  feature:
+    - WORKSPACE.md
+    - memory.yaml
+    - memory.md
+    - tasks/${task-id}.yaml
+    - snapshots/${task-id}-*.md
+    - sessions/${task-id}-${today}-*.md
+    # feature tasks include memory.md for architecture context
+
+  refactor:
+    - WORKSPACE.md
+    - memory.yaml
+    - memory.md
+    - tasks/${task-id}.yaml
+    - snapshots/${task-id}-*.md
+    # refactor tasks include memory.md to understand conventions being refactored

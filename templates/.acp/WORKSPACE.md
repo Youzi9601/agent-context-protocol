@@ -7,7 +7,9 @@
 (Primary language, framework, tools.)
 
 ## Current Focus
-(Highest-priority task ID, e.g. `feature-001`.)
+none
+
+Replace `none` with the highest-priority task ID when work begins, e.g. `feature-001`.
 
 ## Important Links
 - Repository:

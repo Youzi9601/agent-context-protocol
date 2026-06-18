@@ -30,15 +30,19 @@ Copy [`SKILL.md`](SKILL.md) into the agent's system prompt, custom instructions,
 
 ### 2. Initialize a New Project
 
+The ACP-aware agent should scaffold `.acp/` directly: read each starter from `templates/.acp/` and write its contents into your project root. If you prefer to do it manually:
+
 ```bash
 cp -r templates/.acp/ ./my-project/.acp/
 ```
 
-Then edit `.acp/WORKSPACE.md` to describe the project's goal, and `.acp/memory.yaml` to record language, frameworks, and conventions.
+Either way, edit `.acp/WORKSPACE.md` to describe the project's goal, and `.acp/memory.yaml` to record language, frameworks, and conventions.
 
 ### 3. Switch Agents Mid-Project
 
 Open the project in any ACP-compliant agent. The agent reads `.acp/`, identifies the active task, and reports the current state. **No verbal preamble required.**
+
+(For the full report structure including the `## Verification` block, see [`spec/READ.md`](spec/READ.md).)
 
 ```text
 **Project:** my-project
@@ -59,27 +63,34 @@ Open the project in any ACP-compliant agent. The agent reads `.acp/`, identifies
 ├── README.md                this file
 ├── SKILL.md                 the installable skill (≤2000 chars)
 ├── .gitignore               excludes plan.md and local-only artifacts
-├── spec/                    full specification
+├── spec/                    ACP protocol definition
 │   ├── overview.md          problem, principles, roadmap
 │   ├── folder-structure.md  what lives under .acp/
 │   ├── READ.md              entry flow
 │   ├── task.md              task.yaml format
-│   ├── snapshot.md          snapshot.md format
+│   ├── snapshot.md          snapshot.md format + latest alias
 │   ├── session.md           session.md format
 │   ├── triggers.md          when to activate / stay dormant
 │   ├── verification.md      self-check after READ
 │   ├── gotchas.md           failure modes
 │   ├── trigger-tests.md     positive/negative/edge scenarios
 │   ├── rationale.md         why each design choice
-│   ├── memory.md            (Phase 2, scaffold)
-│   └── context-assembly.md  (Phase 2, scaffold)
-└── templates/
-    └── .acp/                starter files to copy into a new project
-        ├── WORKSPACE.md
-        ├── memory.yaml
-        ├── tasks/example-task.yaml
-        ├── sessions/.gitkeep
-        └── snapshots/.gitkeep
+│   ├── memory.md            (v0.2) long-form reasoning layer
+│   ├── context-assembly.md  (v0.2) task-type context rules
+│   └── prompts.md           (v0.3) versioned prompt fragments
+├── templates/
+│   └── .acp/                starter files to copy into a new project
+│       ├── WORKSPACE.md
+│       ├── memory.yaml
+│       ├── memory.md        (v0.2)
+│       ├── context-assembly.yaml  (v0.2, optional)
+│       ├── prompts/         (v0.3) — .gitkeep at init
+│       └── tasks, sessions, snapshots/   each holds .gitkeep at init
+├── references/              optional supporting material
+│   ├── examples.md          ACP walkthrough: Agent A / Agent B scenarios
+│   └── migration.md          upgrading from v0.1 to v0.2
+└── examples/
+    └── example-task.yaml    reference task file; not copied into scaffolds
 ```
 
 ---
@@ -100,9 +111,9 @@ The two compose. A workspace with both MCP servers and `.acp/` gives an agent ha
 
 ## Roadmap
 
-- **Phase 1 — v0.1 (this release).** Folder layout, file formats, READ flow, `SKILL.md`. Progressive disclosure: short SKILL.md links to richer `spec/` documents.
-- **Phase 2 — v0.2.** Shared knowledge base (`memory.md`), automatic context assembly rules, cross-workspace linking.
-- **Phase 3 — v0.3.** Optional prompt library, conformance suite, migration helpers from common stores.
+- **Phase 1 — v0.1 (released).** Folder layout, file formats, READ flow, `SKILL.md`. Progressive disclosure: short SKILL.md links to richer `spec/` documents.
+- **Phase 2 — v0.2 (released).** `memory.md` (long-form reasoning), `context-assembly.yaml` (task-type context rules), cross-workspace `related:` field.
+- **Phase 3 — v0.3 (current).** Optional `prompts/` library, conformance suite, migration helpers from common stores.
 
 See `spec/overview.md` and `spec/rationale.md` for the full reasoning.
 
@@ -122,4 +133,4 @@ Issues and PRs are welcome. Before proposing changes:
 
 ## License
 
-To be determined. Until a LICENSE file is added, all rights are reserved by the maintainer.
+[MIT](LICENSE).

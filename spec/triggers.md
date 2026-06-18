@@ -8,11 +8,11 @@ For every user turn, the agent must answer this question **before** doing anythi
 
 > "Did the user implicitly or explicitly hand me the project, such that prior context under `.acp/` is relevant?"
 
-If **yes**, run READ. If **no**, ignore `.acp/` entirely and respond normally.
+If **yes** and `.acp/` exists, run READ. If **yes** but `.acp/` is missing, follow the [No `.acp/` Path](#no-acp-path). If **no**, ignore ACP entirely and respond normally.
 
 ## Positive Triggers (activate ACP)
 
-Activate when **any** of these is true AND the project contains `.acp/`:
+Activate READ when **any** of these is true AND the project contains `.acp/`:
 
 | # | Trigger                                                                            |
 |---|------------------------------------------------------------------------------------|
@@ -27,14 +27,14 @@ Activate when **any** of these is true AND the project contains `.acp/`:
 | 9 | The agent is asked to write a `snapshot` or `session` file.                        |
 | 10 | A commit message, PR description, or issue body mentions a task ID from `.acp/tasks/`. |
 
-If only some are true (e.g. user mentions a project but `.acp/` is missing), fall through to [Negative Triggers](#negative-triggers-do-not-activate) and follow the [No .acp/ Path](#no-acp-path).
+If the user appears to want project continuity but `.acp/` is missing, do not run READ. Follow the [No `.acp/` Path](#no-acp-path) instead.
 
 ## Negative Triggers (do NOT activate)
 
 | # | Negative                                                                    |
 |---|------------------------------------------------------------------------------|
 | 1 | User asks a general knowledge / Q&A question unrelated to the project.       |
-| 2 | Project has no `.acp/` directory.                                            |
+| 2 | Project has no `.acp/` directory and the user did not ask for ACP, continuity, resume, handoff, snapshot, or session behavior. |
 | 3 | User says "skip ACP", "no ACP", "without .acp", "ignore the protocol".        |
 | 4 | The turn is a one-shot file operation (read X, write Y, search Z).           |
 | 5 | User is in a non-code conversation (creative writing, casual chat).          |
@@ -46,9 +46,18 @@ If only some are true (e.g. user mentions a project but `.acp/` is missing), fal
 When the project lacks `.acp/` but the user appears to want continuity:
 
 1. State plainly: "This project has no `.acp/` directory. ACP requires one for cross-agent continuity."
-2. Offer two paths:
-   - **Install**: suggest `cp -r templates/.acp/ ./` then customizing `WORKSPACE.md` and `memory.yaml`.
-   - **Skip**: continue without ACP. The user accepts that no handoff will be possible later.
+2. Offer three paths in this priority order:
+   - **Scaffold (default).** Read each starter from `templates/.acp/` in the ACP repo and write the contents into the project root under `.acp/`. The starter files are:
+     - `WORKSPACE.md`
+     - `memory.yaml`
+     - `memory.md`
+     - `context-assembly.yaml` (optional)
+     - `tasks/.gitkeep`
+     - `sessions/.gitkeep`
+     - `snapshots/.gitkeep`
+     - `prompts/` (optional — see `spec/prompts.md`)
+   - **Manual `cp -r`.** Suggest `cp -r templates/.acp/ ./` for users who prefer shell-issued commands or lack a write-tool-equipped agent.
+   - **Skip.** Continue without ACP. The user accepts that no handoff will be possible later.
 3. **Do not invent `.acp/` files.** Invented files break later agents' trust.
 
 ## Opt-Out Semantics
@@ -57,7 +66,7 @@ The user can opt out for:
 
 - **This turn only**: "skip ACP for this question" — agent proceeds normally this turn; READ resumes next turn.
 - **The rest of the session**: "no ACP for this session" — agent ignores `.acp/` until the user re-enables.
-- **All future sessions on this project**: edit `memory.yaml` and add `acp: disabled` under a project-level block (Phase 2 feature; see `spec/memory.md`).
+- **All future sessions on this project**: edit `memory.yaml` and add `acp: disabled` under a project-level block (see `spec/memory.md` for the opt-out mechanism).
 
 Agent must respect the chosen scope exactly. Re-enabling without explicit user input is a bug.
 

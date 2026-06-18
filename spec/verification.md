@@ -11,7 +11,7 @@ The agent ticks each box. **All five must pass** before reporting.
 | 1 | `WORKSPACE.md` loaded                              | File opened, non-empty, has `# ` heading.       |
 | 2 | `memory.yaml` loaded                               | YAML parsed with no error, not empty.           |
 | 3 | Active task identified                             | At most one `status: doing` task, or user-confirmed choice among multiple. |
-| 4 | Latest session identified                          | Most recent `sessions/*.md` (by filename date + seq) is selected and read. |
+| 4 | Latest session identified                          | Most recent session for the active task (by filename date + seq) is selected and read. |
 | 5 | Referenced snapshots loaded                        | Every path in active task's `context_refs` exists and was read. |
 
 ## Verifying Each Check (in detail)
@@ -45,9 +45,11 @@ The agent ticks each box. **All five must pass** before reporting.
 ### Check 4: Latest session identified
 
 - List `.acp/sessions/*.md`.
-- Sort by filename stem `{task-id}-{YYYY-MM-DD}-{seq}.md` lexicographically; the largest is the latest.
-- Tiebreaker: if today's date appears multiple times, prefer the highest `seq`. Else prefer the most recent date.
-- Open it. If the file is corrupt or frontmatter is malformed, fall back to the next most recent.
+- Filter to filenames that start with the active task ID (`{task-id}-`).
+- Sort matching filename stems `{task-id}-{YYYY-MM-DD}-{seq}.md` lexicographically; the largest is the latest.
+- Tiebreaker: if today's date appears multiple times, prefer the highest `seq`. Else prefer the most recent date for that task.
+- Open it. If the file is corrupt or frontmatter is malformed, fall back to the next most recent session for that task.
+- If no matching session exists, report "First session on this task" and continue from the task file plus referenced snapshots.
 
 ### Check 5: Referenced snapshots loaded
 

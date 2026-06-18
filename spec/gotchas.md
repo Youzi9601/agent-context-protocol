@@ -73,17 +73,17 @@ Each gotcha lists: **symptom**, **root cause**, **prevention**.
 - Treat as low-trust. Report "Last activity on this task was N days ago."
 - Ask the user before treating the stale status as authoritative. Possible paths: (a) resume, (b) close it, (c) split into smaller tasks.
 
-## 7. Title vs. ID Drift
+## 7. Filename vs. ID Drift
 
-**Symptom:** A task's `id` is `auth-feature` but the file is `feature-auth.yaml`. Or `id` is renamed but downstream `context_refs` still use the old one.
+**Symptom:** A task's `id` is `auth-feature` but the file is `feature-auth.yaml`. Or `id` is renamed without renaming the task file.
 
 **Root cause:** Manual renaming without refactoring `context_refs`.
 
 **Prevention:**
 
-- Treat mismatch as a soft error. Use the file's actual `id` (its filename stem) as source of truth.
-- Update every `context_refs` in the affected task to point at the renaming-conformant filename.
-- Make a note in the new snapshot's body describing the rename.
+- Treat mismatch as a malformed task. Report it and refuse to act on that task until the filename stem and `id` match.
+- Fix by renaming the file or updating the `id`, then update any sessions, snapshots, and `context_refs` that refer to the old task ID.
+- If a rename is intentional, write a snapshot after the repair that records the old ID, new ID, and reason for the change.
 
 ## 8. Timezone Confusion in Session Filenames
 

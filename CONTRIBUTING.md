@@ -95,7 +95,7 @@ slow down review.>
 ## Review and Merge
 
 - Maintainer reviews for design rationale (does the change contradict anything in `spec/rationale.md`?).
-- Two green CI jobs: `markdownlint` (if present), `yamllint templates/ spec/`.
+- Lint locally before sending a PR: `yamllint templates/ spec/` (and `markdownlint` if installed). At the time of writing there is no GitHub Actions workflow in this repo, so a clean local run is the gate. When a workflow is added later, the same jobs must be green on CI.
 - Conventional Commits preferred (`feat:`, `fix:`, `docs:`, `refactor:`).
 - Maintainer squash-merges to keep `main` linear.
 

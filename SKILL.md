@@ -1,51 +1,43 @@
 ---
 name: agent-context-protocol
-description: Use when a project has `.acp/` and the user resumes work, references a task ID, switches agents, asks for snapshot/session, or edits under `.acp/`. Triggers on "this project", "the repo", "continue", "where were we". Skip general Q&A, no-`.acp/` projects, one-off file ops, creative writing, "skip ACP". MIT.
+description: Use for project continuity via `.acp/`: resume, task ID, agent switch, snapshot/session, edits under `.acp/`, or explicit ACP init/use. Skip: general Q&A, one-offs, opt-out. MIT.
 ---
 
-# Agent Context Protocol -- SKILL v0.1
+# Agent Context Protocol -- SKILL
 
 ## When to Activate
 
-ACTIVATE only when ALL true:
+ACTIVATE when ANY: resume context, task ID, agent switch, `.acp/` access, snapshot/session request, or "use ACP". Full: `spec/triggers.md`.
 
-1. Project has `.acp/` at its root.
-2. User did not opt out.
+SKIP: "skip ACP"/"no ACP", unrelated Q&A, one-offs, opt-out.
 
-DO NOT activate when: user asks general Q&A with no project; no `.acp/`; user says "skip ACP" / "no ACP"; task is a one-off file op. When unsure, ask. Full: `spec/triggers.md`.
+When unsure, ask.
 
 ## READ Flow (run all 5 before any work)
 
 1. Read `.acp/WORKSPACE.md`.
 2. Read `.acp/memory.yaml`.
 3. Read `.acp/tasks/` with `status: doing`.
-4. Find latest session for active task (highest seq today).
-5. Load every `context_refs` snapshot.
-
-Then self-check via `spec/verification.md`. Only proceed if all 5 items pass.
+4. Find the active task's latest session.
+5. Load every `context_refs` snapshot. Then verify via `spec/verification.md`.
 
 ## Report
 
-```
-**Project:** <name>
-**Active task:** <ID + title, or "none">
-**Where we left off:** <1-3 bullets>
-**Suggested next action:** <one sentence>
-**Open questions:** <bullets or "none">
-```
+Use the `## Workspace Report` block from [`spec/READ.md`](spec/READ.md). Append `## Verification` (see [`spec/verification.md`](spec/verification.md)) only when a check failed.
 
-No `.acp/`? Tell user: `cp -r templates/.acp/ .`.
+No `.acp/`? Scaffold from `templates/.acp/` (read starter, write to project root). User can `cp -r` instead.
 
 ## Formats (terse)
 
-- `task.yaml`: `id`, `title`, `status`, `assigned_agent`, `created`, `updated`; opt `dependencies`, `context_refs` (vs .acp/), `files` (vs root), `notes`. Full: `spec/task.md`.
-- `snapshot.md`: durable conclusion. FM `task`, `date`, `agent`. `{task-id}-{YYYY-MM-DD}.md`. Full: `spec/snapshot.md`.
-- `session.md`: convo summary. FM `task`, ISO ts+offset, `agent`. `{task-id}-{YYYY-MM-DD}-{seq}.md`. Full: `spec/session.md`.
+- `task.yaml`: `id`, `title`, `status`, `assigned_agent`, `created`, `updated`; opt `dependencies`, `context_refs` (vs .acp/), `files` (vs root), `notes`.
+- `snapshot.md`: FM `task`, `date`, `agent`. `{task-id}-{YYYY-MM-DD}.md`.
+- `session.md`: FM `task`, ts+offset, `agent`. `{task-id}-{YYYY-MM-DD}-{seq}.md`.
+- `memory.md`: on-demand reasoning layer.
+- `context-assembly.yaml`: task-type → context files.
+- `prompts/`: versioned prompt fragments; see `spec/prompts.md`.
 
 Snapshot when context fragments, task done, or decision made. Session at conversation end. Both append-only.
 
 ## More
 
-Triggers `spec/triggers.md` | Verify `spec/verification.md` | Gotchas `spec/gotchas.md` | Tests `spec/trigger-tests.md` | Rationale `spec/rationale.md`.
-
-ACP-SKILL v0.1.
+Triggers `spec/triggers.md` | Verify `spec/verification.md` | Gotchas `spec/gotchas.md` | Tests `spec/trigger-tests.md` | Rationale `spec/rationale.md` | Memory `spec/memory.md` | Context `spec/context-assembly.md` | Prompts `spec/prompts.md`.

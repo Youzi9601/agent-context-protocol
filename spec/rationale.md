@@ -84,7 +84,7 @@ The defaults are designed for skills that **do work** — call APIs, render docu
 
 Three consequences follow:
 
-1. **No `scripts/`.** A script under `scripts/` would need a runtime (Python, Node, Bash). Different agents run on different runtimes; introducing one is a hostile act against portability. Any "automation" that becomes important belongs in `spec/context-assembly.md` (Phase 2), which lets the project author describe assembly in YAML — and the agent does the work.
+1. **No `scripts/`.** A script under `scripts/` would need a runtime (Python, Node, Bash). Different agents run on different runtimes; introducing one is a hostile act against portability. Any "automation" that becomes important belongs in `spec/context-assembly.md`, which lets the project author describe assembly in YAML — and the agent does the work.
 2. **No `references/`.** ACP's references are the spec files themselves (`spec/*.md`). Progressive disclosure is achieved by **citing** the right spec file from `SKILL.md`, not by separating references into a sidecar folder. See [Why the SKILL.md Is So Short](#why-the-skillmd-is-so-short).
 3. **No `assets/`.** Assets only make sense for skills that produce artifacts (PDFs, icons, slide decks). ACP produces text files the agent writes itself; bundling templates is the only asset needed, and those live under `templates/` at the repo root, not under the skill directory.
 
@@ -92,12 +92,12 @@ If a project genuinely needs scripts (for instance, to auto-generate a `WORKSPAC
 
 ## Why the SKILL.md Is So Short
 
-See [Awesome Claude Skills](https://github.com/travisvn/awesome-claude-skills) — the public guidance is "metadata loading ~100 tokens, full instructions <5k, bundled resources on demand." SKILL.md is the metadata layer: it tells the agent that ACP exists and how to discover deeper docs at `spec/`. Putting the entire spec there would burn the user's context window before the agent has even seen the project.
+The widely-cited guidance for skill metadata — roughly: metadata ~100 tokens, full instructions <5k, bundled resources on demand — is what `SKILL.md` follows here. SKILL.md is the metadata layer: it tells the agent that ACP exists and how to discover deeper docs at `spec/`. Putting the entire spec there would burn the user's context window before the agent has even seen the project.
 
 ## Future Rationale Questions
 
 These are deliberately deferred:
 
 - Why no sqlite index? — see above, defer until projects need it.
-- Why no shared global `.acp/`? — see `spec/memory.md` Phase 2 stub.
+- Why no shared global `.acp/`? — see `spec/memory.md` for the current approach.
 - Why not extend MCP? — see `spec/overview.md`. The answer is layers: MCP for tools, ACP for memory. They compose.
