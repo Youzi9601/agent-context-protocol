@@ -1,6 +1,18 @@
 ---
 name: agent-context-protocol
-description: Use for project continuity via `.acp/`: resume, task ID, agent switch, snapshot/session, edits under `.acp/`, or explicit ACP init/use. Skip: general Q&A, one-offs, opt-out. MIT.
+description: "Use for project continuity via `.acp/`: resume, task ID, agent switch, snapshot/session, edits under `.acp/`, or explicit ACP init/use. Skip: general Q&A, one-offs, opt-out."
+license: MIT
+compatibility: Requires `.acp/` workspace structure. Works with any LLM. No external packages required.
+metadata:
+  author: "Youzi9601 (柚子Youzi)"
+  version: "0.2"
+  triggers: resume, task-id, agent-switch, snapshot, session, explicit-acp
+  spec_version: "0.2"
+  supports_context_refs: true
+  supports_memory_yaml: true
+  supports_task_yaml: true
+  supports_snapshot_md: true
+  supports_session_md: true
 ---
 
 # Agent Context Protocol -- SKILL
